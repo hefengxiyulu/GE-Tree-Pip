@@ -18,7 +18,7 @@ private:
 	//the number of grid is x*y
 	int cell_number_x, cell_number_y;
 public:
-	Statistic stat = Statistic(0, 0, 0, 0,0,0);
+	Statistic stat = Statistic(0, 0, 0, 0, 0 ,0);
 	GQT(int _cell_number_x, int _cell_number_y, Point _botLeft, Point _topRight) : botLeft(_botLeft), topRight(_topRight),
 		cell_number_x(_cell_number_x), cell_number_y(_cell_number_y) {
 		//enable grid
@@ -32,6 +32,7 @@ public:
 		Point root_center(_cell_number_x / 2, _cell_number_y / 2);
 		root = new Node(root_center, true, false, Point(0, 0), Point(_cell_number_x, _cell_number_y));
 		grid = new Grid(_cell_number_x, _cell_number_y, root);
+		stat.cnt_memory += (sizeof(*root) + _cell_number_x * _cell_number_y * sizeof(Node*));
 
 	}
 	Node* findNode(Point &p);
@@ -40,7 +41,8 @@ public:
 	queue<Obj*> findNeighbor_stat(Obj* n, Point source);
 	void insertPoint(Point p);
 	void subdivide(Node* n);
-	void update_grid(Node* n);
+	void subdivide_stat(Node* n);
+	void updateGrid(Node* n);
 	vector<Point> kNN(Point source, int k);
 	vector<Point> kNN_stat(Point source, int k);
 	void initializeVisited(Node* n);
