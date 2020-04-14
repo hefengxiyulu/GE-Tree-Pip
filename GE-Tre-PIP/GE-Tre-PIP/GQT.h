@@ -50,7 +50,7 @@ public:
 	double caculateDistance(Point p, Node* n);
 	double caculateDistance_stat(Point p, Node* n);
 	Statistic& getStat();
-	void GEtree_statStorageCost(int length, int widthint, int* basic_cost, int* auxiliary_cost, int* real_memory);
+	void GEtree_statStorageCost(int length, int widthint, int* auxiliary_cost);
 };
 
 
