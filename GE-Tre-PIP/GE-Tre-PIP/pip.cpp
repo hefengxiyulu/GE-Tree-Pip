@@ -722,3 +722,40 @@ void pip::exportTestresult(const char* filename)
 	for (int i = 0; i < this->testedPointCount; i++)
 		fprintf(fp, "p %d %d \n", i, this->testedResult[i]);
 }
+
+void pip::PIP_statStorageCost(int length, int widthint, int* basic_cost, int* auxiliary_cost, int* real_memory)
+{
+	//length 、width是网格分辨率 *basic_cost  存储多边形、被测点开销   *auxiliary_cost 网格辅助结构开销  *real_memory为精确内存空间统计
+	//基本结构
+	int temp;
+	if (this->testedPolygon == NULL)
+		return;
+	temp = sizeof(GCPPolygon2D);                                                        //96字节 减16字节
+	temp = sizeof(struct Point2D);                                                          //16字节
+	temp = sizeof(struct Edge2D);                                                          //8字节
+
+	*basic_cost = sizeof(GCPPolygon2D) +                                         //168
+		sizeof(struct Point2D) * this->testedPolygon->vertexCount +
+		sizeof(struct Edge2D) * this->testedPolygon->edgeCount - 16;
+
+	//grid memory
+
+	//discrete point memory
+
+	//
+
+	////网格辅助结构
+	//temp = sizeof(struct Grid2D);   //整体网格结构体，包含分辨率、网格单元数、 136字节
+	//temp = sizeof(struct GridCell2D);   //网格单元列表   464字节   减去 BlockEdgeRef[100]多余的空间
+	//temp = sizeof(struct BlockEdgeRef2D); //边片段  32字节
+	//temp = sizeof(struct RGPCell2D);   //网格顶点   24字节
+	//temp = sizeof(struct RegionInfo_modify);    //单元网格分区 824字节
+	//temp = sizeof(struct RgpPointInSegment);   //存储网格边片段信息  408字节
+
+	//temp = sizeof(struct GridCell2D) * length * width;    //1136
+	//temp = sizeof(struct BlockEdgeRef2D) * this->block_edgeCount;   //608
+	//temp = sizeof(struct RGPCell2D) * (length + 1) * (width + 1);  //840
+	//temp = sizeof(struct RgpPointInSegment) * this->grid_res[0] * (this->grid_res[1] - 1);   //7344
+	//temp = sizeof(struct RgpPointInSegment) * (this->grid_res[0] - 1) * this->grid_res[1];   //8160
+	//temp = sizeof(struct RegionInfo_modify) * this->cuda_TotalBlockRegionNum;  //6944
+}
