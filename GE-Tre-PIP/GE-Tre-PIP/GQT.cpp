@@ -20,7 +20,7 @@ public:
 };
 
 //lazy maintainance
-void GQT::update_grid(Node* n) {
+void GQT::updateGrid(Node* n) {
 	if (n->is_leaf) {
 		Point bot = n->boundary_bot_left;
 		Point top = n->boundary_top_right;
@@ -31,12 +31,13 @@ void GQT::update_grid(Node* n) {
 		}
 		return;
 	}
-	update_grid(n->nw);
-	update_grid(n->ne);
-	update_grid(n->se);
-	update_grid(n->sw);
+	updateGrid(n->nw);
+	updateGrid(n->ne);
+	updateGrid(n->se);
+	updateGrid(n->sw);
 
 }
+
 //split the node containing more points than threshold
 void GQT::subdivide(Node* n) {
 	if (n->boundary_bot_left.IntX >= n->boundary_top_right.IntX || n->boundary_bot_left.IntY >= n->boundary_top_right.IntY)
@@ -56,7 +57,60 @@ void GQT::subdivide(Node* n) {
 	n->ne = new Node(ne_center, true, false, n->center, n->boundary_top_right);
 	n->se = new Node(se_center, true, false, bot_middle_point, right_midlle_point);
 	n->sw = new Node(sw_center, true, false, n->boundary_bot_left, n->center);
+	
+	n->is_leaf = false;
 
+	while (!q.empty()) {
+		Point loc = q.front();
+		//north west rectangle
+		if (loc.IntX >= left_middle_point.IntX && loc.IntX < top_midlle_point.IntX
+			&& loc.IntY >= left_middle_point.IntY && loc.IntY < top_midlle_point.IntY) {
+			n->nw->obj_array.push(q.front());
+			if (n->nw->obj_array.size() > NODE_MAX_POINTS_NUMBER) subdivide(n->nw);
+		}
+		//north east rectangle
+		else if (loc.IntX >= top_midlle_point.IntX && loc.IntX < right_midlle_point.IntX
+			&& loc.IntY >= left_middle_point.IntY && loc.IntY < top_midlle_point.IntY) {
+			n->ne->obj_array.push(q.front());
+			if (n->ne->obj_array.size() > NODE_MAX_POINTS_NUMBER) subdivide(n->ne);
+		}
+		//south east rectangle
+		else if (loc.IntX >= top_midlle_point.IntX && loc.IntX < right_midlle_point.IntX
+			&& loc.IntY >= bot_middle_point.IntY && loc.IntY < right_midlle_point.IntY) {
+			n->se->obj_array.push(q.front());
+			if (n->se->obj_array.size() > NODE_MAX_POINTS_NUMBER) subdivide(n->se);
+		}
+		//south west rectangle
+		else if (loc.IntX >= left_middle_point.IntX && loc.IntX < top_midlle_point.IntX
+			&& loc.IntY >= bot_middle_point.IntY && loc.IntY < right_midlle_point.IntY) {
+			n->sw->obj_array.push(q.front());
+			if (n->sw->obj_array.size() > NODE_MAX_POINTS_NUMBER) subdivide(n->sw);
+		}
+		q.pop();
+	}
+	return;
+}
+
+void GQT::subdivide_stat(Node* n) {
+	if (n->boundary_bot_left.IntX >= n->boundary_top_right.IntX || n->boundary_bot_left.IntY >= n->boundary_top_right.IntY)
+		return;
+	queue<Point> q = n->obj_array;
+	Point nw_center((n->center.IntX + n->boundary_bot_left.IntX) / 2, (n->center.IntY + n->boundary_top_right.IntY) / 2);
+	Point ne_center((n->center.IntX + n->boundary_top_right.IntX) / 2, (n->center.IntY + n->boundary_top_right.IntY) / 2);
+	Point se_center((n->center.IntX + n->boundary_top_right.IntX) / 2, (n->center.IntY + n->boundary_bot_left.IntY) / 2);
+	Point sw_center((n->center.IntX + n->boundary_bot_left.IntX) / 2, (n->center.IntY + n->boundary_bot_left.IntY) / 2);
+
+	Point left_middle_point(n->boundary_bot_left.IntX, n->center.IntY);
+	Point top_midlle_point(n->center.IntX, n->boundary_top_right.IntY);
+	Point right_midlle_point(n->boundary_top_right.IntX, n->center.IntY);
+	Point bot_middle_point(n->center.IntX, n->boundary_bot_left.IntY);
+
+	n->nw = new Node(nw_center, true, false, left_middle_point, top_midlle_point);
+	n->ne = new Node(ne_center, true, false, n->center, n->boundary_top_right);
+	n->se = new Node(se_center, true, false, bot_middle_point, right_midlle_point);
+	n->sw = new Node(sw_center, true, false, n->boundary_bot_left, n->center);
+
+	stat.cnt_memory += (sizeof(*n->nw) + sizeof(*n->ne) + sizeof(*n->se) + sizeof(*n->sw));
 	n->is_leaf = false;
 
 	while (!q.empty()) {
@@ -219,7 +273,7 @@ void GQT::insertPoint(Point p) {
 	{
 		n->obj_array.push(p);
 		subdivide(n);
-		update_grid(n);
+		updateGrid(n);
 	}
 	else n->obj_array.push(p);
 }
