@@ -649,19 +649,21 @@ Statistic& GQT::getStat() {
 
 void GQT::GEtree_statStorageCost(int length, int widthint, long long int* auxiliary_cost)
 {
-	int temp = 0;
+	//grid/cell memory
+	long long int temp_grid = 0;
 	cout << sizeof(bool) << endl;
 	queue<Node*> traverse;
 	// cell memory
 	for (int i = 0; i < length; i++)
 		for (int j = 0; j < widthint; j++) {
-			temp += sizeof(grid->cells[i][j]);
+			temp_grid += sizeof(grid->cells[i][j]);
 		}
 	// node memory
+	long long int temp_Node = 0;
 	traverse.push(root);
 	while (!traverse.empty()) {
 		Node* n = traverse.front();
-		temp += sizeof(*n) + (n->obj_array.size()) * sizeof(Point) - sizeof(Point);
+		temp_Node += sizeof(*n) + (n->obj_array.size()) * sizeof(Point) - sizeof(Point);
 		if (n->se) traverse.push(n->se);
 		if (n->sw) traverse.push(n->sw);
 		if (n->ne) traverse.push(n->ne);
@@ -669,7 +671,8 @@ void GQT::GEtree_statStorageCost(int length, int widthint, long long int* auxili
 		traverse.pop();
 	}
 	// GQT memory
-	temp += sizeof(Point) * 2 + 6 * sizeof(double) + 2 * sizeof(int) + sizeof(Node*) + sizeof(Grid*);
-	(*auxiliary_cost) = temp;
+	long long int temp_GQT = 0;
+	temp_GQT += sizeof(Point) * 2 + 6 * sizeof(double) + 2 * sizeof(int) + sizeof(Node*) + sizeof(Grid*);
+	(*auxiliary_cost) = temp_grid + temp_Node + temp_GQT;
 	return;
 }

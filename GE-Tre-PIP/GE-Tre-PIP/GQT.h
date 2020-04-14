@@ -32,7 +32,7 @@ public:
 		Point root_center(_cell_number_x / 2, _cell_number_y / 2);
 		root = new Node(root_center, true, false, Point(0, 0), Point(_cell_number_x, _cell_number_y));
 		grid = new Grid(_cell_number_x, _cell_number_y, root);
-		stat.cnt_memory += (sizeof(*root) + _cell_number_x * _cell_number_y * sizeof(Node*));
+		//stat.cnt_memory += (sizeof(*root) + _cell_number_x * _cell_number_y * sizeof(Node*));
 
 	}
 	Node* findNode(Point &p);

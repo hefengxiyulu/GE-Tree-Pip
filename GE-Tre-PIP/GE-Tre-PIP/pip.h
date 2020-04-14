@@ -103,7 +103,7 @@ struct pip
 	bool JudgeCollineation(Point2D p1, Point2D p2, Point2D q);
 	void exportTestresult(const char* filename);
 	Statistic stat_pip = Statistic(0, 0, 0, 0,0,0);
-	void PIP_statStorageCost(long long int length, long long int widthint, long long int* basic_cost, long long int* auxiliary_cost, long long int* real_memory); //memory cost
+	void PIP_statStorageCost(long long int* basic_cost, long long int* auxiliary_cost); //memory cost
 
 	//当knn找到的散点为多边形顶点时，需要寻找临近边，但是测试多边形含有孔、洞，
    //因此需要在所有边中进行寻找，笨办法

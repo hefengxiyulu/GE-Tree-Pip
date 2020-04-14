@@ -17,7 +17,7 @@ int main()
 	bool isStatistic = false;
 	//import polygon data
 	pip testPip;
-	testPip.readData("pol28000.obj", 0);
+	testPip.readData("pol10.obj", 0);
 	double minEdge = testPip.findMinEdge();
 	double benchmark = 1;
 	if (minEdge < 3)
@@ -50,7 +50,7 @@ int main()
 	if (!isStatistic)
 	{
 		//test points
-		testPip.readTestPoint("testPoint3.txt");
+		testPip.readTestPoint("testPoint10.txt");
 		timer.start();
 		Point p4;
 		for (int i = 0; i < testPip.testedPointCount; i++)
@@ -81,12 +81,12 @@ int main()
 		}
 		timer.end();
 		printf("PIPprocess time %f\n", timer.time);
-		testPip.exportTestresult("GETree_result3.txt");
+		testPip.exportTestresult("GETree_result10.txt");
 	}
 	else
 	{
 		//test points  data statistic
-		testPip.readTestPoint("testPoint3.txt");
+		testPip.readTestPoint("testPoint10.txt");
 		Point p4;
 		for (int i = 0; i < testPip.testedPointCount; i++)
 		{
@@ -133,11 +133,17 @@ int main()
 	long long int total_memory = test.stat.cnt_memory;
 	cout << "total add:" << total_add << " total compare:" << total_compare << " total multiply:" << total_multiply <<
 		" total memory:" << total_memory << endl;
-	long long int memory[4];
+
+	long long int memory[3]; //memory[0]: polygon basic_cost, memory[1]: polygon auxiliary_cost, memory[2]: GE-Tree  auxiliary_cost
 	//pip memory cost
-	testPip.PIP_statStorageCost(0, 0, &memory[0], &memory[1], &memory[2]);
+	testPip.PIP_statStorageCost(&memory[0], &memory[1]);
 	//GE-Tree memory cost
-	test.GEtree_statStorageCost(1024, 1024, &memory[3]);
+	test.GEtree_statStorageCost(1024, 1024, &memory[2]);
+
+	double real_total_auxiliary_cost = (double)(memory[1] + memory[2]) / 1024.0;
+	double real_total_basic_cost = (double)(memory[0]) / 1024.0;
+	cout << "real total basic memory:" << real_total_basic_cost << "KB" << endl;
+	cout << "real total auxiliary memory:" << real_total_auxiliary_cost << "KB" << endl;
 	return 0;
 }
 
