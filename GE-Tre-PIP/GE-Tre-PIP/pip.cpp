@@ -722,3 +722,26 @@ void pip::exportTestresult(const char* filename)
 	for (int i = 0; i < this->testedPointCount; i++)
 		fprintf(fp, "p %d %d \n", i, this->testedResult[i]);
 }
+
+void pip::PIP_statStorageCost(int length, int widthint, int* basic_cost, int* auxiliary_cost, int* real_memory)
+{
+	//length 、width是网格分辨率 *basic_cost  存储多边形、被测点开销   *auxiliary_cost 网格辅助结构开销  *real_memory为精确内存空间统计
+	//基本结构
+	int temp;
+	if (this->testedPolygon == NULL)
+		return;
+	temp = sizeof(GCPPolygon2D);                                                        //96字节 减16字节
+	temp = sizeof(struct Point2D);                                                          //16字节
+	temp = sizeof(struct Edge2D);                                                          //8字节
+
+	*basic_cost = sizeof(GCPPolygon2D) +                                         //168
+		sizeof(struct Point2D) * this->testedPolygon->vertexCount +
+		sizeof(struct Edge2D) * this->testedPolygon->edgeCount - 16;
+
+	//discrete point memory
+	int discrete_num = discretePoint.size();
+	int discrete_point_memory = sizeof(Point) * discrete_num;
+	
+	*auxiliary_cost = discrete_point_memory;
+	//grid memory
+}

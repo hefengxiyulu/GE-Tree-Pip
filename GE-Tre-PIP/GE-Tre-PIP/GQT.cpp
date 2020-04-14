@@ -646,3 +646,8 @@ queue<Obj*> GQT::findNeighbor_stat(Obj* element, Point source) {
 Statistic& GQT::getStat() {
 	return stat;
 }
+
+void GQT::GEtree_statStorageCost(int length, int widthint, int* basic_cost, int* auxiliary_cost, int* real_memory)
+{
+
+}
