@@ -134,8 +134,11 @@ int main()
 	long long int total_memory = test.stat.cnt_memory;
 	cout << "total add:" << total_add << " total compare:" << total_compare << " total multiply:" << total_multiply <<
 		" total memory:" << total_memory << endl;
-	long long int memory[3];
+	long long int memory[4];
+	//pip memory cost
 	testPip.PIP_statStorageCost(0, 0, &memory[0], &memory[1], &memory[2]);
+	//GE-Tree memory cost
+	test.GEtree_statStorageCost(1024, 1024, &memory[3]);
 	return 0;
 }
 

@@ -647,7 +647,7 @@ Statistic& GQT::getStat() {
 	return stat;
 }
 
-void GQT::GEtree_statStorageCost(int length, int widthint, int* auxiliary_cost)
+void GQT::GEtree_statStorageCost(int length, int widthint, long long int* auxiliary_cost)
 {
 	int temp = 0;
 	queue<Node*> traverse;
