@@ -723,7 +723,7 @@ void pip::exportTestresult(const char* filename)
 		fprintf(fp, "p %d %d \n", i, this->testedResult[i]);
 }
 
-void pip::PIP_statStorageCost(int length, int widthint, int* basic_cost, int* auxiliary_cost, int* real_memory)
+void pip::PIP_statStorageCost(long long int length, long long int widthint, long long int* basic_cost, long long int* auxiliary_cost, long long int* real_memory)
 {
 	//length 、width是网格分辨率 *basic_cost  存储多边形、被测点开销   *auxiliary_cost 网格辅助结构开销  *real_memory为精确内存空间统计
 	//基本结构
@@ -743,5 +743,4 @@ void pip::PIP_statStorageCost(int length, int widthint, int* basic_cost, int* au
 	int discrete_point_memory = sizeof(Point) * discrete_num;
 	
 	*auxiliary_cost = discrete_point_memory;
-	//grid memory
 }

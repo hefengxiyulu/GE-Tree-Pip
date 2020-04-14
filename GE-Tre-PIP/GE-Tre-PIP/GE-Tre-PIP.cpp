@@ -14,11 +14,11 @@ using namespace std;
 int main()
 {
 	SmallTimer timer;
-	bool isStatistic = true;
+	bool isStatistic = false;
 
 	//import polygon data
 	pip testPip;
-	testPip.readData("pol28000.obj", 0);
+	testPip.readData("pol3.obj", 0);
 	double minEdge = testPip.findMinEdge();
 	double benchmark = 1;
 	if (minEdge < 3)
@@ -51,7 +51,7 @@ int main()
 	if (!isStatistic)
 	{
 		//test points
-		testPip.readTestPoint("testPoint28000.txt");
+		testPip.readTestPoint("testPoint3.txt");
 		timer.start();
 		Point p4;
 		for (int i = 0; i < testPip.testedPointCount; i++)
@@ -77,17 +77,17 @@ int main()
 				testP.x = p4.x;
 				testP.y = p4.y;
 				testPip.testedResult[i] = testPip.getPointAttri(testP, edgeStartP, edgeEndP);//INSIDE 1    OUTSIDE 0
-				cout << "Point num:" << i << " result:" << testPip.testedResult[i] << endl;
+				//cout << "Point num:" << i << " result:" << testPip.testedResult[i] << endl;
 			}
 		}
 		timer.end();
 		printf("PIPprocess time %f\n", timer.time);
-		testPip.exportTestresult("GETree_result28000.txt");
+		testPip.exportTestresult("GETree_result3.txt");
 	}
 	else
 	{
 		//test points  data statistic
-		testPip.readTestPoint("testPoint28000.txt");
+		testPip.readTestPoint("testPoint3.txt");
 		Point p4;
 		for (int i = 0; i < testPip.testedPointCount; i++)
 		{
@@ -134,7 +134,8 @@ int main()
 	long long int total_memory = test.stat.cnt_memory;
 	cout << "total add:" << total_add << " total compare:" << total_compare << " total multiply:" << total_multiply <<
 		" total memory:" << total_memory << endl;
-
+	long long int memory[3];
+	testPip.PIP_statStorageCost(0, 0, &memory[0], &memory[1], &memory[2]);
 	return 0;
 }
 
