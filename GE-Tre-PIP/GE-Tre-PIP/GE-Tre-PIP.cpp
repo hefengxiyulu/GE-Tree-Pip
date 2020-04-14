@@ -15,10 +15,9 @@ int main()
 {
 	SmallTimer timer;
 	bool isStatistic = false;
-
 	//import polygon data
 	pip testPip;
-	testPip.readData("pol3.obj", 0);
+	testPip.readData("pol28000.obj", 0);
 	double minEdge = testPip.findMinEdge();
 	double benchmark = 1;
 	if (minEdge < 3)
