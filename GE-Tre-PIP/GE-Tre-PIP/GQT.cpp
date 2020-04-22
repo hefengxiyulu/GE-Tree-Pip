@@ -651,7 +651,7 @@ void GQT::GEtree_statStorageCost(int length, int widthint, long long int* auxili
 {
 	//grid/cell memory
 	long long int temp_grid = 0;
-	cout << sizeof(bool) << endl;
+	//cout << sizeof(bool) << endl;
 	queue<Node*> traverse;
 	// cell memory
 	for (int i = 0; i < length; i++)
@@ -674,5 +674,21 @@ void GQT::GEtree_statStorageCost(int length, int widthint, long long int* auxili
 	long long int temp_GQT = 0;
 	temp_GQT += sizeof(Point) * 2 + 6 * sizeof(double) + 2 * sizeof(int) + sizeof(Node*) + sizeof(Grid*);
 	(*auxiliary_cost) = temp_grid + temp_Node + temp_GQT;
+	return;
+}
+
+void GQT::setNodeNumber() {
+	queue<Node*> traverse;
+	traverse.push(root);
+	this->node_number = 0;
+	while (!traverse.empty()) {
+		Node* n = traverse.front();
+		if (n->is_leaf) this->node_number++;
+		if (n->se) traverse.push(n->se);
+		if (n->sw) traverse.push(n->sw);
+		if (n->ne) traverse.push(n->ne);
+		if (n->nw) traverse.push(n->nw);
+		traverse.pop();
+	}
 	return;
 }

@@ -48,4 +48,8 @@
       <Filter>源文件</Filter>
     </ClCompile>
   </ItemGroup>
+  <ItemGroup>
+    <CudaCompile Include="GE_Tree_PIP.cu" />
+    <CudaCompile Include="GE_Tree_PIP.cuh" />
+  </ItemGroup>
 </Project>

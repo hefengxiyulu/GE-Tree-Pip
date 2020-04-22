@@ -270,6 +270,7 @@ void pip::edgeDiscretize(double benchmark)
 	//delete duplicate data
 	sort(discretePoint.begin(), discretePoint.end(), cmp);
 	discretePoint.erase(unique(discretePoint.begin(), discretePoint.end(), equal), discretePoint.end());
+	discretePoint_size = discretePoint.size();
 }
 
 int pip::findAdjacentVertex(Point result)

@@ -83,6 +83,7 @@ struct pip
 	Point2D testedPointRegion[2];
 	int curPolygonIndex = 0;
 	int* testedResult = NULL;
+	int discretePoint_size = 0;
 	
 
 	//Point2D *discretePoint;

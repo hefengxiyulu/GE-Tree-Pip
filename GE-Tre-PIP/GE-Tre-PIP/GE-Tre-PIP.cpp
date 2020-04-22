@@ -9,7 +9,13 @@
 #include <queue>
 #include <cmath> 
 #include "pip.h"
+#include"GE_Tree_PIP.cuh"
 using namespace std;
+
+extern "C" void InitGE_Tree_PIP(GE_TREE_PIP_DATA **ha_pip, GE_TREE_PIP_DATA **da_pip, pip &testPip, GQT &test, unsigned int testSize);
+extern "C" void CopyPipValuetoHost(GE_TREE_PIP_DATA *ha_pip, pip &testPip, GQT &test, unsigned int testSize);
+extern "C" double Pip_With_Cuda(GE_TREE_PIP_DATA *h_pip, GE_TREE_PIP_DATA *d_pip, pip &testPip, GQT &test, unsigned int testSize);
+extern "C" void DeinitGE_Tree_PIP(GE_TREE_PIP_DATA* h_pip, GE_TREE_PIP_DATA *d_pip);
 
 int main()
 {
@@ -17,7 +23,9 @@ int main()
 	bool isStatistic = false;
 	//import polygon data
 	pip testPip;
-	testPip.readData("pol10.obj", 0);
+	testPip.readData("pol100.obj", 0);
+
+	timer.start();
 	double minEdge = testPip.findMinEdge();
 	double benchmark = 1;
 	if (minEdge < 3)
@@ -46,11 +54,14 @@ int main()
 	{
 		test.insertPoint(testPip.discretePoint[i]);
 	}
+	timer.end();
+	printf("PIP Preprocessing time %f\n", timer.time);
 
+	// test code
 	if (!isStatistic)
 	{
 		//test points
-		testPip.readTestPoint("testPoint10.txt");
+		testPip.readTestPoint("testPoint100.txt");
 		timer.start();
 		Point p4;
 		for (int i = 0; i < testPip.testedPointCount; i++)
@@ -80,13 +91,13 @@ int main()
 			}
 		}
 		timer.end();
-		printf("PIPprocess time %f\n", timer.time);
-		testPip.exportTestresult("GETree_result10.txt");
+		printf("PIP test time %f\n", timer.time);
+		testPip.exportTestresult("GETree_result100.txt");
 	}
 	else
 	{
 		//test points  data statistic
-		testPip.readTestPoint("testPoint10.txt");
+		testPip.readTestPoint("testPoint100.txt");
 		Point p4;
 		for (int i = 0; i < testPip.testedPointCount; i++)
 		{
@@ -126,6 +137,18 @@ int main()
 		testPip.stat_pip.cnt_compare++;
 	}
 	//////// 
+	test.setNodeNumber();
+	// GPU  test
+	unsigned int testSize = testPip.testedPointCount;
+	GE_TREE_PIP_DATA *h_GE_Tree_PIP;
+	GE_TREE_PIP_DATA *d_GE_Tree_PIP;
+	InitGE_Tree_PIP(&h_GE_Tree_PIP, &d_GE_Tree_PIP, testPip,test, testSize);
+	CopyPipValuetoHost(h_GE_Tree_PIP, testPip, test, testSize);
+	double GPU_test_time = Pip_With_Cuda(h_GE_Tree_PIP, d_GE_Tree_PIP, testPip, test, testSize);
+	DeinitGE_Tree_PIP(h_GE_Tree_PIP, d_GE_Tree_PIP);
+
+
+
 	//data statistic
 	long long int total_add = testPip.stat_pip.cnt_add + test.stat.cnt_add;
 	long long int total_compare = testPip.stat_pip.cnt_compare + test.stat.cnt_compare;

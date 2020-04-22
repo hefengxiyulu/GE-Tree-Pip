@@ -1,6 +1,10 @@
 #pragma once
 
 #include <queue>
+#define NODE_MAX_POINTS_NUMBER 1000
+#define MAX_NUMBER_AMOUNT 1000000
+#define CELL_NUMBER_X 1024
+#define CELL_NUMBER_Y 1024
 
 using namespace std;
 class Node;
@@ -20,6 +24,17 @@ struct Point
 };
 
 // The object may be node or point combining the distance from the source point 
+//struct Obj_GPU
+//{
+//public:
+//	Point pos;
+//	Node *node = NULL;
+//	double distance;
+//	bool isNode;
+//	Obj_GPU(Point _pos, double _distance) : pos(_pos), distance(_distance), isNode(false) {}
+//	Obj_GPU(Node* _node, double _distance) : node(_node), distance(_distance), isNode(true) {}
+//};
+
 struct Obj
 {
 public:
@@ -30,6 +45,7 @@ public:
 	Obj(Point _pos, double _distance) : pos(_pos), distance(_distance), isNode(false) {}
 	Obj(Node* _node, double _distance) : node(_node), distance(_distance), isNode(true) {}
 };
+
 
 //the node of quadtree
 class Node {

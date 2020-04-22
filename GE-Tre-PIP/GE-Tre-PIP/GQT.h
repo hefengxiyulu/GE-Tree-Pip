@@ -9,15 +9,14 @@ using namespace std;
 
 class GQT
 {
-private:
+public:
 	Grid *grid;
 	Point botLeft, topRight;
 	Node* root = NULL;
 	//Statistic stat = Statistic(0, 0, 0, 0);
 	double grid_width, grid_height, minX, minY, cell_width, cell_height;
 	//the number of grid is x*y
-	int cell_number_x, cell_number_y;
-public:
+	int cell_number_x, cell_number_y, node_number;
 	Statistic stat = Statistic(0, 0, 0, 0, 0 ,0);
 	GQT(int _cell_number_x, int _cell_number_y, Point _botLeft, Point _topRight) : botLeft(_botLeft), topRight(_topRight),
 		cell_number_x(_cell_number_x), cell_number_y(_cell_number_y) {
@@ -51,6 +50,7 @@ public:
 	double caculateDistance_stat(Point p, Node* n);
 	Statistic& getStat();
 	void GEtree_statStorageCost(int length, int widthint, long long int* auxiliary_cost);
+	void setNodeNumber();
 };
 
 
