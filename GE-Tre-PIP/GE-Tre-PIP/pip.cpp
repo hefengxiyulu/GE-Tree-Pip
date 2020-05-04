@@ -273,6 +273,63 @@ void pip::edgeDiscretize(double benchmark)
 	discretePoint_size = discretePoint.size();
 }
 
+void pip::edgeDiscretize_new(int pointNum)    //新添加，每条边离散为pointNum个点
+{
+	int edgeCount = this->testedPolygon->edgeCount;
+	for (int i = 0; i < edgeCount; i++)
+	{
+		int startIdx = this->testedPolygon->edgeTable[i].startIndex;
+		int endIdx = this->testedPolygon->edgeTable[i].endIndex;
+		Point2D p1, p2;
+		p1 = this->testedPolygon->vertexTable[startIdx];
+		p2 = this->testedPolygon->vertexTable[endIdx];
+
+		Point tempP;
+		double edgeDis = calculateDis(p1, p2);
+		if (edgeDis > 0)
+		{
+			//double benchmark = edgeDis / pointNum;
+			//int pointNum = edgeDis / benchmark;
+			double x_step, y_step;
+			x_step = (p2.x - p1.x) / pointNum;
+			y_step = (p2.y - p1.y) / pointNum;
+			//
+			tempP.x = p1.x;
+			tempP.y = p1.y;
+			tempP.isVertex = true;
+			tempP.edgeIdx = i;
+			discretePoint.push_back(tempP);
+			tempP.isVertex = false;
+			for (int i = 1; i < pointNum; i++)
+			{
+				tempP.x = p1.x + i * x_step;
+				tempP.y = p1.y + i * y_step;
+				discretePoint.push_back(tempP);
+			}
+			tempP.x = p2.x;
+			tempP.y = p2.y;
+			tempP.isVertex = true;
+			discretePoint.push_back(tempP);
+		}
+		else
+		{
+			tempP.x = p1.x;
+			tempP.y = p1.y;
+			tempP.isVertex = true;
+			tempP.edgeIdx = i;
+			discretePoint.push_back(tempP);
+
+			tempP.x = p2.x;
+			tempP.y = p2.y;
+			discretePoint.push_back(tempP);
+		}
+	}
+	//delete duplicate data
+	sort(discretePoint.begin(), discretePoint.end(), cmp);
+	discretePoint.erase(unique(discretePoint.begin(), discretePoint.end(), equal), discretePoint.end());
+	discretePoint_size = discretePoint.size();
+}
+
 int pip::findAdjacentVertex(Point result)
 {
 	//当knn找到的散点为多边形顶点时，需要寻找临近边，但是测试多边形含有孔、洞，不能通过加减1来获取临近边

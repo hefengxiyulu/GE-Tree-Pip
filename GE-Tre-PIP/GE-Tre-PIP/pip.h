@@ -95,6 +95,7 @@ struct pip
 	double calculateDis_stat(Point p, Coeffecient l);
 	double calculateDis(Point source, Point result);
 	void edgeDiscretize(double benchmark);
+	void edgeDiscretize_new(int pointNum);//新添加，每条边离散为pointNum个点
 	double findMinEdge();//output benchmark  find min edge distance
 	void initData();
 	int readTestPoint(const char* fn);

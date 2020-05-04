@@ -23,9 +23,10 @@ int main()
 	bool isStatistic = false;
 	//import polygon data
 	pip testPip;
-	testPip.readData("pol100.obj", 0);
+	testPip.readData("pol10.obj", 0);
 
 	timer.start();
+
 	double minEdge = testPip.findMinEdge();
 	double benchmark = 1;
 	if (minEdge < 3)
@@ -37,6 +38,8 @@ int main()
 		benchmark = minEdge / 5.0;
 	}
 	testPip.edgeDiscretize(benchmark);
+
+	//testPip.edgeDiscretize_new(3); //5:代表每条边离散为5个点
 	testPip.initData();
 
 	//this is a test
@@ -61,7 +64,7 @@ int main()
 	if (!isStatistic)
 	{
 		//test points
-		testPip.readTestPoint("testPoint100.txt");
+		testPip.readTestPoint("testPoint10.txt");
 		timer.start();
 		Point p4;
 		for (int i = 0; i < testPip.testedPointCount; i++)
@@ -92,12 +95,12 @@ int main()
 		}
 		timer.end();
 		printf("PIP test time %f\n", timer.time);
-		testPip.exportTestresult("GETree_result100.txt");
+		testPip.exportTestresult("GETree_result10.txt");
 	}
 	else
 	{
 		//test points  data statistic
-		testPip.readTestPoint("testPoint100.txt");
+		testPip.readTestPoint("testPoint10.txt");
 		Point p4;
 		for (int i = 0; i < testPip.testedPointCount; i++)
 		{

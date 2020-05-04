@@ -719,8 +719,8 @@ __global__ void GE_Tree_PIP_Kernal(GE_TREE_PIP_DATA  *d_pip)
 	Point_GPU edgeStartP, edgeEndP, testP;
 	edgeStartP = d_pip->d_vertexTable[edge.startIndex];
 	edgeEndP = d_pip->d_vertexTable[edge.endIndex];
-  //  printf("Index:%d, %d, start vertex:%f,%f,end vertex:%f,%f\n", edge.startIndex, edge.endIndex, d_pip->d_vertexTable[edge.startIndex].x, 
-		//d_pip->d_vertexTable[edge.startIndex].y,	d_pip->d_vertexTable[edge.endIndex].x, d_pip->d_vertexTable[edge.endIndex].y);
+   /* printf("Index:%d, %d, start vertex:%f,%f,end vertex:%f,%f\n", edge.startIndex, edge.endIndex, d_pip->d_vertexTable[edge.startIndex].x, 
+		d_pip->d_vertexTable[edge.startIndex].y,	d_pip->d_vertexTable[edge.endIndex].x, d_pip->d_vertexTable[edge.endIndex].y);*/
 	d_pip->d_testedresult[Idx]= getPointAttri_GPU(testPoint, edgeStartP, edgeEndP);
 	return;
 }
